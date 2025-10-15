@@ -150,7 +150,7 @@ const Navbar = () => {
                     abortControllerRef.current.abort();
                 }
 
-                if (operatorName !== "Flipkart") {
+                if (operatorName == "Blinkit") {
                     setWalletBalance("N/A");
                     return;
                 }
@@ -337,7 +337,7 @@ const Navbar = () => {
                         <Accordion.Item eventKey="0">
                             <Accordion.Header>Activation</Accordion.Header>
                             <Accordion.Body>
-                                {["Flipkart","Amazon","Zepto","Swiggy","BigBasket"].includes(operatorName) && (
+                                {["Blinkit","Amazon","Zepto","Swiggy","BigBasket","Zepto"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`
@@ -355,7 +355,7 @@ const Navbar = () => {
                                         }
                                     />
                                 )}
-                                {["Amazon","Zepto","BigBasket","Flipkart"].includes(operatorName) && (
+                                {["Amazon","Zepto","BigBasket","Blinkit","Zepto"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/rules${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`
@@ -373,7 +373,7 @@ const Navbar = () => {
                                         }
                                     />
                                 )}
-                                {!["Flipkart","Amazon","Zepto"].includes(operatorName) && (
+                                {!["Blinkit","Amazon","Zepto","Zepto"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/keyword-analysis${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`
@@ -391,7 +391,7 @@ const Navbar = () => {
                                         }
                                     />
                                 )}
-                                {!["Flipkart","Amazon","Zepto","Swiggy","BigBasket"].includes(operatorName) && (
+                                {!["Blinkit","Amazon","Zepto","Swiggy","BigBasket","Zepto"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/product-analytics${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`
@@ -427,7 +427,7 @@ const Navbar = () => {
                                         }
                                     />
                                 )}
-                                {["Flipkart","Amazon","Zepto","Swiggy"].includes(operatorName) && (
+                                {["Blinkit","Amazon","Zepto","Swiggy","Zepto"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/history${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`

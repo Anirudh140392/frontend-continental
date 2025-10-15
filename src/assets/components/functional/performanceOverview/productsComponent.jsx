@@ -333,7 +333,7 @@ const ProductsComponent = () => {
     ];
 
 
-    const ProductsColumnFlipkart = [
+    const ProductsColumnBlinkit = [
          {
             field: "fsn_id",
             headerName: "FSN ID",
@@ -856,7 +856,7 @@ const ProductsComponent = () => {
         if (operator === "Amazon") return ProductsColumnAmazon;
 
         if (operator === "Zepto") return ProductsColumnZepto;
-        if (operator === "Flipkart") return ProductsColumnFlipkart;
+        if (operator === "Blinkit") return ProductsColumnBlinkit;
         if (operator === "Swiggy") return ProductsColumnSwiggy;
         return [];
     }, [operator, brands]);

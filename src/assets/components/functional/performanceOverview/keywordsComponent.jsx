@@ -50,7 +50,7 @@ const KeywordsComponent = () => {
         const endDate = formatDate(dateRange[0].endDate);
 
         try {
-            const url = `https://react-api-script.onrender.com/continental/keyword?start_date=${startDate}&end_date=${endDate}&platform=${operator}`;
+            const url = `https://react-api-script.onrender.com/continental/keywords?start_date=${startDate}&end_date=${endDate}&platform=${operator}`;
             const cacheKey = `cache:GET:${url}`;
 
             const cached = getCache(cacheKey);
@@ -492,18 +492,50 @@ const KeywordsComponent = () => {
         },
     ];
 
-      const KeywordsColumnFlipkart = [
+      const KeywordsColumnBlinkit = [
         {
-            field: "keyword_name",
+            field: "keyword",
             headerName: "TARGET",
-            minWidth: 150,
+            minWidth: 170,
             renderCell: (params) => (
-                <div className="text-icon-div cursor-pointer" onClick={() => handleKeywordClick(params.row.keyword_name, params.row.campaign_id)}>
-                    <Typography className="redirect" variant="body2">{params.row.keyword_name}</Typography>
+                <div className="text-icon-div cursor-pointer" onClick={() => handleKeywordClick(params.row.keyword, params.row.campaign_id)}>
+                    <Typography className="redirect" variant="body2">{params.row.keyword}</Typography>
                 </div>
             ),
         },
-         { field: "match_type", headerName: "MATCH TYPE", minWidth: 150, headerAlign: "left", },
+        {
+            field: "avg_cpm",
+            headerName: "BID",
+            minWidth: 170,
+            renderCell: (params) => (
+                <BidCell
+                    value={params.row.avg_cpm}
+                    campaignId={params.row.campaign_id}
+                    platform={operator}
+                    keyword={params.row.keyword}
+                    matchType={params.row.keyword_type}
+                    onUpdate={(campaignId, keyword, newBid, matchType) => {
+                        console.log("Updating bid:", { campaignId, keyword, newBid, matchType });
+                        setKeywordsData(prevData => {
+                            const updatedData = {
+                                ...prevData,
+                                data: prevData.data.map(row =>
+                                    row.campaign_id === campaignId &&
+                                        row.keyword=== keyword &&
+                                        row.keyword_type === matchType
+                                        ? { ...row, avg_cpm: newBid }
+                                        : row
+                                )
+                            };
+                            console.log("Updated keywordsData:", updatedData);
+                            return updatedData;
+                        });
+                    }} onSnackbarOpen={handleSnackbarOpen}
+                />
+            ), type: "number", align: "left",
+            headerAlign: "left",
+        },
+         { field: "keyword_type", headerName: "MATCH TYPE", minWidth: 150, headerAlign: "left", },
         
                {
             field: "impressions",
@@ -543,44 +575,19 @@ const KeywordsComponent = () => {
         },
 
         {
-            field: "revenue",
+            field: "sales",
             headerName: "SALES",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.revenue} percentValue={params.row.revenue_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.sales} percentValue={params.row.sales_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },
         
        
        
-        {
-            field: "cpc",
-            headerName: "CPC",
-            minWidth: 150,
-            renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.cpc} percentValue={params.row.cpc_change} />
-            ), type: "number", align: "left",
-            headerAlign: "left",
-        },
-        {
-            field: "ctr",
-            headerName: "CTR",
-            minWidth: 150,
-            renderCell: (params) => (
-                <NewPercentageDataComponent firstValue={params.row.ctr} secValue={params.row.ctr_change} />
-            ), type: "number", align: "left",
-            headerAlign: "left",
-        },
-        {
-            field: "cvr",
-            headerName: "CVR",
-            minWidth: 150,
-            renderCell: (params) => (
-                <NewPercentageDataComponent firstValue={params.row.cvr} secValue={params.row.cvr_change} />
-            ), type: "number", align: "left",
-            headerAlign: "left",
-        },
+       
+       
         
          
         /*{
@@ -604,17 +611,11 @@ const KeywordsComponent = () => {
             headerAlign: "left",
         },
         {
-            field: "aov",
-            headerName: "AOV",
-            minWidth: 150,
-            renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.aov} percentValue={params.row.aov_change} />
-            ), type: "number", align: "left",
-            headerAlign: "left",
+            field: "total_atc",
+            headerName: "ATC",
+            minWidth: 80,
+           
         },
-
-
-        
         {
             field: "campaign_name",
             headerName: "CAMPAIGN",
@@ -789,7 +790,7 @@ const KeywordsComponent = () => {
         if (operator === "Amazon") return KeywordsColumnAmazon;
 
         if (operator === "Zepto") return KeywordsColumnZepto;
-         if (operator === "Flipkart") return KeywordsColumnFlipkart;
+         if (operator === "Blinkit") return KeywordsColumnBlinkit;
          if (operator === "Swiggy") return KeywordsColumnSwiggy;
         return [];
     }, [operator, brands, updatingKeywords]);

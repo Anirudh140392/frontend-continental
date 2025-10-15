@@ -150,7 +150,7 @@ const ExistingKeywordsDatatable = () => {
         }
     };
 
-    const ExistingKeywordsColumnFlipkart = [
+    const ExistingKeywordsColumnBlinkit = [
         {
             field: "keyword",
             headerName: "KEYWORD",
@@ -208,7 +208,7 @@ const ExistingKeywordsDatatable = () => {
     };
 
      const columns = useMemo(() => {
-            if (operator === "Flipkart") return ExistingKeywordsColumnFlipkart;
+            if (operator === "Blinkit") return ExistingKeywordsColumnBlinkit;
             
            
             return [];

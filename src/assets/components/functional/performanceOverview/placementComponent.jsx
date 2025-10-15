@@ -492,7 +492,7 @@ const KeywordsComponent = () => {
         },
     ];
 
-      const KeywordsColumnFlipkart = [
+      const KeywordsColumnBlinkit = [
         {
             field: "placement_type",
             headerName: "TARGET",
@@ -819,7 +819,7 @@ const KeywordsComponent = () => {
         if (operator === "Amazon") return KeywordsColumnAmazon;
 
         if (operator === "Zepto") return KeywordsColumnZepto;
-         if (operator === "Flipkart") return KeywordsColumnFlipkart;
+         if (operator === "Blinkit") return KeywordsColumnBlinkit;
          if (operator === "Swiggy") return KeywordsColumnSwiggy;
         return [];
     }, [operator, brands, updatingKeywords]);

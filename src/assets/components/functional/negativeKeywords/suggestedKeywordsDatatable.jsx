@@ -44,7 +44,7 @@ const SuggestedKeywordsDatatable = () => {
         const endDate = formatDate(dateRange[0].endDate);
 
         try {
-            const url = `https://react-api-script.onrender.com/continental/negative_keyword?start_date=${startDate}&end_date=${endDate}&platform=${operator}`;
+            const url = `https://react-api-script.onrender.com/continental/suggested-negative-keyword?start_date=${startDate}&end_date=${endDate}&platform=${operator}`;
             const cacheKey = `cache:GET:${url}`;
 
             // Check cache first
@@ -403,14 +403,14 @@ const SuggestedKeywordsDatatable = () => {
         
     ];
 
-      const SuggestedKeywordsColumnFlipkart = [
+      const SuggestedKeywordsColumnBlinkit = [
         {
-            field: "keyword_name",
+            field: "keyword",
             headerName: "SEARCH TERM",
             minWidth: 200,
             renderCell: (params) => (
-                <div className="text-icon-div cursor-pointer redirect" onClick={() => handleKeywordClick(params.row.keyword_name, params.row.campaign_id)}>
-                    <Typography variant="body2">{params.row.keyword_name}</Typography>
+                <div className="text-icon-div cursor-pointer redirect" onClick={() => handleKeywordClick(params.row.keyword, params.row.campaign_id)}>
+                    <Typography variant="body2">{params.row.keyword}</Typography>
                 </div>
             ),
         },
@@ -434,13 +434,8 @@ const SuggestedKeywordsDatatable = () => {
             },
             align: "center"
         },*/
-        {
-            field: "ad_group_id",
-            headerName: "AD GROUP",
-            minWidth: 150,
-        },
-        { field: "type", headerName: "TYPE", minWidth: 150 },
-         { field: "match_type", headerName: " MATCH TYPE", minWidth: 150 },
+      
+         { field: "keyword_type", headerName: " MATCH TYPE", minWidth: 150 },
         {
             field: "campaign_name",
             headerName: "CAMPAIGN NAME",
@@ -486,51 +481,38 @@ const SuggestedKeywordsDatatable = () => {
         },
         
         {
-            field: "revenue",
+            field: "sales",
             headerName: "SALES",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.revenue} percentValue={params.row.revenue_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.sales} percentValue={params.row.sales_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },
         
         {
-            field: "aov",
-            headerName: "AOV",
+            field: "roas",
+            headerName: "ROAS",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.aov} percentValue={params.row.aov_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.roas} percentValue={params.row.roas_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },
          {
-            field: "cpm",
+            field: "avg_cpm",
             headerName: "CPM",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.cpm} percentValue={params.row.cpm_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.avg_cpm} percentValue={params.row.avg_cpm_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },
          {
-            field: "ctr",
-            headerName: "CTR",
-            minWidth: 150,
-            renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.ctr} percentValue={params.row.ctr_change} />
-            ), type: "number", align: "left",
-            headerAlign: "left",
-        },
-         {
-            field: "cpc",
-            headerName: "CPC",
-            minWidth: 150,
-            renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.cpc} percentValue={params.row.cpc_change} />
-            ), type: "number", align: "left",
-            headerAlign: "left",
-        },
+            field: "total_atc",
+            headerName: "ATC",
+            minWidth: 150
+        }
     ];
 
 
@@ -625,7 +607,7 @@ const SuggestedKeywordsDatatable = () => {
     };
 
     const columns = useMemo(() => {
-        if (operator === "Flipkart") return SuggestedKeywordsColumnFlipkart;
+        if (operator === "Blinkit") return SuggestedKeywordsColumnBlinkit;
         if (operator === "Swiggy") return SuggestedKeywordsColumnSwiggy;
 
         if (operator === "Zepto") return SuggestedKeywordsColumnZepto;

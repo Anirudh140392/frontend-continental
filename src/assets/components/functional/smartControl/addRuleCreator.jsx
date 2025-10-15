@@ -72,7 +72,7 @@ const normalizeFilters = (filters) => {
             acos: extractFilterValue(ruleData.filters, "acos"),
         };
         const getUpdateRuleUrl = () => {
-    if (platform === "Flipkart") {
+    if (platform === "Blinkit") {
         return `https://react-api-script.onrender.com/continental/update-rule?rule_id=${ruleData.rule_id}&platform=${platform}`;
     } else if (platform === "BigBasket") {
         return `http://react-api-script.onrender.com/continental/update-rule?platform=${platform}&rule_id=${ruleData.rule_id}`;

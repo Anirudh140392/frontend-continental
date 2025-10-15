@@ -178,33 +178,27 @@ const OverviewComponent = () => {
         
     ];
 
-     const CategoryColumnsFlipkart = [
+     const CategoryColumnsBlinkit = [
         {
-            field: "Campaign_Tags",
+            field: "campaign_tags",
             headerName: "CAMPAIGN TAGS",
             minWidth: 200,
            
         },
         {
-            field: "Spend",
+            field: "estimated_budget_consumed_x",
             headerName: "SPEND",
             minWidth: 150,
            
         },
-        {
-            field: "Clicks",
-            headerName: "CLICKS",
-            minWidth: 150,
-           
-        },
          {
-            field: "Impressions",
+            field: "impressions_x",
             headerName: "IMPRESSIONS",
             minWidth: 150,
            
         },
          {
-            field: "Sales",
+            field: "total_sales_x",
             headerName: "SALES",
             minWidth: 150,
             type: "number", align: "left",
@@ -213,47 +207,15 @@ const OverviewComponent = () => {
         },
           
          {
-            field: "Orders",
-            headerName: "ORDERS",
+            field: "direct_quantities_sold_x",
+            headerName: "DIRECT ORDERS",
             minWidth: 150,
             type: "number", align: "left",
             headerAlign: "left",
 
         },
          {
-            field: "ROI",
-            headerName: "ROI",
-            minWidth: 150,
-            type: "number", align: "left",
-            headerAlign: "left",
-
-        },
-         {
-            field: "CPC",
-            headerName: "CPC",
-            minWidth: 150,
-            type: "number", align: "left",
-            headerAlign: "left",
-
-        },
-         {
-            field: "CPM",
-            headerName: "CPM",
-            minWidth: 150,
-            type: "number", align: "left",
-            headerAlign: "left",
-
-        },
-         {
-            field: "CTR",
-            headerName: "CTR",
-            minWidth: 150,
-            type: "number", align: "left",
-            headerAlign: "left",
-
-        },
-         {
-            field: "ROAS",
+            field: "roas_x",
             headerName: "ROAS",
             minWidth: 150,
             type: "number", align: "left",
@@ -261,8 +223,8 @@ const OverviewComponent = () => {
 
         },
          {
-            field: "ACOS",
-            headerName: "ACOS",
+            field: "direct_atc_x",
+            headerName: "ATC",
             minWidth: 150,
             type: "number", align: "left",
             headerAlign: "left",
@@ -478,7 +440,7 @@ const OverviewComponent = () => {
             if (operator === "Amazon") return CategoryColumnsAmazon;
     
             if (operator === "Zepto") return CategoryColumnsZepto;
-            if (operator === "Flipkart") return CategoryColumnsFlipkart;
+            if (operator === "Blinkit") return CategoryColumnsBlinkit;
              if (operator === "Swiggy") return CategoryColumnsSwiggy;
             return [];
         }, [operator, brands]);
@@ -551,21 +513,21 @@ const OverviewComponent = () => {
                             <div className="col-md-4">
                                 <CTRWidget
                                     firstHeadingText="Impressions"
-                                    firstHeadingData={`${overviewData?.metrics_data?.Impressions ? toLakhs(overviewData?.metrics_data?.Impressions) : "-"}`}
+                                    firstHeadingData={`${overviewData?.metrics_data?.total_impressions ? toLakhs(overviewData?.metrics_data?.total_impressions) : "-"}`}
                                     secondHeadingText="Clicks"
-                                    secondHeadingData={`${overviewData?.metrics_data?.Clicks ? toThousands(overviewData?.metrics_data?.Clicks) : "-"}`} />
+                                    secondHeadingData={`${overviewData?.metrics_data?.total_clicks ? toThousands(overviewData?.metrics_data?.total_clicks) : "-"}`} />
                             </div>
                             <div className="col-md-4">
                                 <CTRWidget
                                     firstHeadingText="Spends"
-                                    firstHeadingData={`${overviewData?.metrics_data?.Spend ? toLakhs(overviewData?.metrics_data?.Spend) : "-"}`}
+                                    firstHeadingData={`${overviewData?.metrics_data?.total_spends ? toLakhs(overviewData?.metrics_data?.total_spends) : "-"}`}
                                     secondHeadingText="Sales"
-                                    secondHeadingData={`${overviewData?.metrics_data?.Sales ? toLakhs(overviewData?.metrics_data?.Sales) : "-"}`} />
+                                    secondHeadingData={`${overviewData?.metrics_data?.total_sales ? toLakhs(overviewData?.metrics_data?.total_sales) : "-"}`} />
                             </div>
                             <div className="col-md-4">
                                 <CTRWidget
                                     firstHeadingText="Orders"
-                                    firstHeadingData={`${overviewData?.metrics_data?.Orders ? toThousands(overviewData?.metrics_data?.Orders) : "-"}`}
+                                    firstHeadingData={`${overviewData?.metrics_data?.total_orders ? toThousands(overviewData?.metrics_data?.total_orders) : "-"}`}
                                     secondHeadingText="ROAS"
                                     secondHeadingData={`${overviewData?.metrics_data?.avg_roas ? overviewData?.metrics_data?.avg_roas : "-"}`} />
                             </div>

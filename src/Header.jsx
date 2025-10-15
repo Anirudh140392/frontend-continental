@@ -30,7 +30,7 @@ const Header = () => {
   };
 
   const [showSelectedOperator, setShowSelectedOperator] = useState(
-    operatorType ? operatorType : OPERATOR.BLINKIT
+    operatorType ? operatorType : OPERATOR.Blinkit
   );
   const [showHeaderLogo, setShowHeaderLogo] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -105,7 +105,7 @@ const Header = () => {
                <OperatorList
                 showSelectedOperator={showSelectedOperator}
                 setShowSelectedOperator={setShowSelectedOperator}
-                selectedOperator={OPERATOR.FLIPKART}
+                selectedOperator={OPERATOR.BLINKIT}
               />
             
                
