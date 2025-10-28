@@ -26,81 +26,110 @@ const KeywordsComponent = () => {
     const operator = searchParams.get("operator");
     const navigate = useNavigate()
 
-    const getKeywordsData = async () => {
-        if (!operator) return;
+    const getKeywordsData = async (forceRefresh = false) => {
+    if (!operator) return;
 
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
+    if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    setKeywordsData({});
+    setIsLoading(true);
+
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+        console.error("No access token found");
+        setIsLoading(false);
+        return;
+    }
+
+    const startDate = formatDate(dateRange[0].startDate);
+    const endDate = formatDate(dateRange[0].endDate);
+
+    try {
+        const ts = forceRefresh ? `&_=${Date.now()}` : "";
+        const url = `https://react-api-script.onrender.com/continental/keywords?start_date=${startDate}&end_date=${endDate}&platform=${operator}${ts}`;
+        const cacheKey = `cache:GET:${url}`;
+
+        if (forceRefresh) {
+            try { localStorage.removeItem(cacheKey); } catch (_) {}
         }
 
-        const controller = new AbortController();
-        abortControllerRef.current = controller;
+        const response = await cachedFetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            signal: controller.signal,
+        }, { ttlMs: 5 * 60 * 1000, cacheKey, bypassCache: forceRefresh });
 
-        setKeywordsData({});
-        setIsLoading(true);
-
-        const token = localStorage.getItem("accessToken");
-        if (!token) {
-            console.error("No access token found");
-            setIsLoading(false);
-            return;
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
 
-        const startDate = formatDate(dateRange[0].startDate);
-        const endDate = formatDate(dateRange[0].endDate);
-
-        try {
-            const url = `https://react-api-script.onrender.com/continental/keywords?start_date=${startDate}&end_date=${endDate}&platform=${operator}`;
-            const cacheKey = `cache:GET:${url}`;
-
-            const cached = getCache(cacheKey);
-            if (cached) {
-                setKeywordsData(cached);
-                setIsLoading(false);
-                return;
-            }
-
-            const response = await cachedFetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                signal: controller.signal,
-            }, { ttlMs: 5 * 60 * 1000, cacheKey });
-
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            setKeywordsData(data);
-        } catch (error) {
-            if (error.name === "AbortError") {
-                console.log("Previous request aborted due to operator change.");
-            } else {
-                console.error("Failed to fetch keywords data:", error.message);
-                setKeywordsData({});
-            }
-        } finally {
-            setIsLoading(false);
+        const data = await response.json();
+        setKeywordsData(data);
+        
+        if (forceRefresh) {
+            try { setCache(cacheKey, data, 5 * 60 * 1000); } catch (_) {}
         }
-    };
+    } catch (error) {
+        // ... error handling ...
+    } finally {
+        setIsLoading(false);
+    }
+};
 
     const abortControllerRef = useRef(null);
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            getKeywordsData();
-        }, 100);
-
-        return () => {
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
+     const dataMutated = useRef(false);
+        
+        // Track if component is currently visible/mounted
+        const isComponentActive = useRef(true);
+    
+       
+        // Utility function to clear all campaign-related caches
+       const clearKeywordCaches = () => {
+    try {
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (key.includes('cache:GET:') && key.includes('/continental/keywords'))) {
+                keysToRemove.push(key);
             }
-            clearTimeout(timeout);
         }
-    }, [operator, dateRange, campaignName]);
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        console.log(`Cleared ${keysToRemove.length} keyword cache entries`);
+    } catch (error) {
+        console.error("Error clearing keyword caches:", error);
+    }
+};
+
+
+useEffect(() => {
+    const timeout = setTimeout(() => {
+        if (localStorage.getItem("accessToken")) {
+            if (dataMutated.current && isComponentActive.current) {
+                console.log("Component fetching fresh data after mutation");
+                getKeywordsData(true);  // Force refresh
+                dataMutated.current = false;
+            } else {
+                getKeywordsData(false);  // Use cache if available
+            }
+        }
+    }, 100);
+
+    return () => {
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+        clearTimeout(timeout);
+    }
+}, [operator, dateRange, campaignName]);
 
     useEffect(() => {
         getBrandsData()
@@ -113,7 +142,10 @@ const KeywordsComponent = () => {
         }
     }, []);
 
-    const handleToggle = (campaignType, keywordId, targetId, adGroupId, campaignId) => {
+     
+        
+        
+           const handleToggle = (campaignType, keywordId, targetId, adGroupId, campaignId) => {
         setConfirmation({ show: true, campaignType, keywordId, targetId, adGroupId, campaignId });
     };
 
@@ -151,7 +183,7 @@ const KeywordsComponent = () => {
                     keywordId={params.row.keyword_id_x}
                     platform={operator}
                     /* parent (or cell renderer) */
-                    onUpdate={(
+                 onUpdate={(
                         campaignId,
                         targetId,
                         campaignType,
@@ -167,6 +199,9 @@ const KeywordsComponent = () => {
                             keywordId,
                             newBid,
                         });
+
+                        // Clear cache so next fetch gets fresh data
+                        clearKeywordCaches();
 
                         setKeywordsData(prevData => {
                             const updatedData = {
@@ -357,18 +392,23 @@ const KeywordsComponent = () => {
         },
          { field: "match_type", headerName: "MATCH TYPE", minWidth: 150, headerAlign: "left", },
         {
-            field: "cpc",
+            field: "bid",
             headerName: "BID",
             minWidth: 150,
             renderCell: (params) => (
                 <BidCell
-                    value={params.row.cpc}
+                    value={params.row.bid}
                     campaignId={params.row.campaign_id}
                     platform={operator}
                     keyword={params.row.keyword_name}
                     matchType={params.row.match_type}
                     onUpdate={(campaignId, keyword, newBid, matchType) => {
                         console.log("Updating bid:", { campaignId, keyword, newBid, matchType });
+
+                        
+                    // Clear cache so next fetch gets fresh data
+                    clearKeywordCaches();
+
                         setKeywordsData(prevData => {
                             const updatedData = {
                                 ...prevData,
@@ -376,7 +416,7 @@ const KeywordsComponent = () => {
                                     row.campaign_id === campaignId &&
                                         row.keyword_name === keyword &&
                                         row.match_type === matchType
-                                        ? { ...row, cpc: newBid }
+                                        ? { ...row, bid: newBid }
                                         : row
                                 )
                             };
@@ -388,12 +428,7 @@ const KeywordsComponent = () => {
             ), type: "number", align: "left",
             headerAlign: "left",
         },
-        {
-            field: "status",
-            headerName: "BID STATUS",
-            minWidth: 100,
-            renderCell: () => <Switch checked={1} />,
-        },
+        
         { field: "keyword_type", headerName: "KEYWORD TYPE", minWidth: 150, },
         { field: "brand_name", headerName: "BRAND", minWidth: 150, type: "singleSelect", valueOptions: brands?.brands },
                 {

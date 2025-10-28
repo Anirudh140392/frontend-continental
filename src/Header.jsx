@@ -107,6 +107,11 @@ const Header = () => {
                 setShowSelectedOperator={setShowSelectedOperator}
                 selectedOperator={OPERATOR.BLINKIT}
               />
+               <OperatorList
+                showSelectedOperator={showSelectedOperator}
+                setShowSelectedOperator={setShowSelectedOperator}
+                selectedOperator={OPERATOR.ZEPTO}
+              />
             
                
               

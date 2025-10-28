@@ -150,8 +150,10 @@ const Navbar = () => {
                     abortControllerRef.current.abort();
                 }
 
-                if (operatorName == "Blinkit") {
+                // Set N/A for Blinkit and Zepto operators
+                if (["Blinkit", "Zepto"].includes(operatorName)) {
                     setWalletBalance("N/A");
+                    setLoading(false);
                     return;
                 }
 

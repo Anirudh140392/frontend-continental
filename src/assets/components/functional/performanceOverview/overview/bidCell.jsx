@@ -13,7 +13,9 @@ const BidCell = ({
   targetId,
   campaignType,
   adGroupId,
-  keywordId
+  keywordId,
+
+  refreshData 
 }) => {
   const [bid, setBid] = useState(value);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -26,6 +28,9 @@ const BidCell = ({
   const handleUpdate = async () => {
     if (bid === originalBid) {
       onSnackbarOpen("No changes made to bid!", "info");
+      if (refreshData) {
+  refreshData();
+}
       return;
     }
 
@@ -40,6 +45,7 @@ const BidCell = ({
         bid: Number(bid),
         keyword: keyword,
         match_type: matchType,
+       
       };
 
       const response = await fetch(
@@ -63,10 +69,11 @@ const BidCell = ({
         onUpdate(campaignId, targetId, campaignType, adGroupId, keywordId, updatedData.bid || bid);
       } else {
         // For Blinkit, Zepto, Swiggy
-        onUpdate(campaignId, keyword, updatedData.bid || bid, matchType);
+       onUpdate(campaignId, updatedData.keyword, updatedData.bid, updatedData.matchType);
       }
 
       onSnackbarOpen(updatedData.message || "Bid updated successfully!", "success");
+     
     } catch (error) {
       console.error("Error updating bid:", error);
       onSnackbarOpen("Failed to update bid!", "error");
@@ -85,9 +92,9 @@ const BidCell = ({
         value={bid}
         onChange={handleBidChange}
         sx={{ width: "120px" }}
-        disabled={isUpdating}
+      
       />
-      <IconButton color="primary" onClick={handleUpdate} disabled={isUpdating}>
+      <IconButton color="primary" onClick={handleUpdate} >
         {isUpdating ? <CircularProgress size={24} /> : <Check />}
       </IconButton>
     </Box>

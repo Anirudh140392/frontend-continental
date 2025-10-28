@@ -1,6 +1,6 @@
 export const OPERATOR = {
     AMAZON: 'Amazon',
-    Zepto: 'Zepto',
+    ZEPTO: 'Zepto',
     BLINKIT:'Blinkit',
     SWIGGY: 'Swiggy',
     BIGBASKET: 'BigBasket',

@@ -8,6 +8,7 @@ const BudgetCell = ({
   platform,
   onUpdate,
   onSnackbarOpen,
+ 
 }) => {
   const [budget, setBudget] = useState(value);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -18,7 +19,11 @@ const BudgetCell = ({
   };
 
   const handleUpdate = async () => {
-   
+    if (budget === originalBudget) {
+      onSnackbarOpen("Budget unchanged", "info");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("No access token found");
@@ -28,6 +33,7 @@ const BudgetCell = ({
         platform: platform,
         campaign_id: Number(campaignId),
         budget: Number(budget),
+        
       };
 
       const response = await fetch(
@@ -46,7 +52,8 @@ const BudgetCell = ({
 
       const updatedData = await response.json();
       
-      // Call onUpdate with the campaign_id and budget from response
+      // Call onUpdate with the campaign_id and new budget
+      // This will trigger cache clearing and data refresh in parent
       onUpdate(campaignId, updatedData.budget || budget);
 
       onSnackbarOpen(updatedData.message || "Budget updated successfully!", "success");
@@ -69,9 +76,13 @@ const BudgetCell = ({
         onChange={handleBudgetChange}
         sx={{ width: "140px" }}
         disabled={isUpdating}
-        inputProps={{ min: originalBudget }}
+        inputProps={{ min: 0 }}
       />
-      <IconButton color="primary" onClick={handleUpdate} disabled={isUpdating}>
+      <IconButton 
+        color="primary" 
+        onClick={handleUpdate} 
+        disabled={isUpdating || budget === originalBudget}
+      >
         {isUpdating ? <CircularProgress size={24} /> : <Check />}
       </IconButton>
     </Box>

@@ -52,7 +52,7 @@ const TopTabs = (props) => {
                             setShowActiveTab={setShowActiveTab}
                             setValue={PERFORMANCETABS.ADGROUPS} />
                     }
-                   {['Zepto'].includes(operatorName) &&
+                   {['Amazon'].includes(operatorName) &&
                         <TabList
                             isShowCount={true}
                             tabText="Placements"
