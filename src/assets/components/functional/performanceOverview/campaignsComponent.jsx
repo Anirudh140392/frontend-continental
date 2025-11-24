@@ -642,10 +642,10 @@ const CampaignsComponent = (props, ref) => {
         });
     };
 
-    const updateCampaignStatus = (campaignId, newStatus, adType) => {
+    const updateCampaignStatus = (campaignId, currentStatus, adType) => {
         setConfirmation({ show: false, campaignId: null, campaignType: null, adType: null, currentStatus: null });
         setUpdatingCampaigns(prev => ({ ...prev, [campaignId]: true }));
-        confirmStatusChange(campaignId, newStatus, adType);
+        confirmStatusChange(campaignId, currentStatus, adType);
     };
 
    const confirmStatusChange = async (campaignId, newStatus, adType) => {
@@ -724,7 +724,7 @@ const CampaignsComponent = (props, ref) => {
                         Cancel
                     </Button>
                     <Button 
-                        onClick={() => updateCampaignStatus(confirmation.campaignId, confirmation.campaignType === 'ACTIVE' ? 'STOPPED' : 'ACTIVE', confirmation.adType)} 
+                        onClick={() => updateCampaignStatus(confirmation.campaignId, confirmation.campaignType === 'ACTIVE' ? 'ACTIVE' : 'STOPPED', confirmation.adType)} 
                         color="primary"
                     >
                         Confirm
