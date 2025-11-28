@@ -285,82 +285,40 @@ const CampaignsComponent = (props, ref) => {
         align: "left",
         headerAlign: "left",
     },
-         {
+        {
             field: "status",
             headerName: "STATUS",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             headerAlign: "center",
             renderCell: (params) => {
                 const status = params.row.status;
-                const campaignId = params.row.campaign_id;
-                // Disable toggle for ENDED and DAILY_BUDGET_EXHAUSTED
-                const isDisabled = status === "ENDED" || status === "DAILY_BUDGET_EXHAUSTED";
-                // Toggle ON for ACTIVE, OFF for PAUSED
-                const isActive = status === "ACTIVE";
+
+                if (updatingCampaigns[params.row.campaign_id]) {
+                    return (
+                        <Box sx={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            <CircularProgress size={24} />
+                        </Box>
+                    );
+                }
+
+                // Toggle is ON for ACTIVE or ON_HOLD
+                // Toggle is OFF for STOPPED
+                const isActive = isStatusActive(status);
+
                 return (
-                    <>
-                        <Switch
-                            checked={isActive}
-                            disabled={isDisabled}
-                            onChange={() => {
-                                // Show confirmation dialog before changing status
-                                setConfirmation({
-                                    show: true,
-                                    campaignId,
-                                    newStatus: isActive ? "PAUSED" : "ACTIVE",
-                                    platform: "Zepto"
-                                });
-                            }}
-                        />
-                        {/* Dialog for confirming status change */}
-                        {confirmation.show && confirmation.campaignId === campaignId && (
-                            <Dialog open={true} onClose={() => setConfirmation({ show: false })}>
-                                <DialogTitle>Confirm Status Change</DialogTitle>
-                                <DialogContent>
-                                    Are you sure you want to change status to {confirmation.newStatus}?
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={() => setConfirmation({ show: false })}>Cancel</Button>
-                                    <Button color="primary" onClick={async () => {
-                                        setUpdatingCampaigns(prev => ({ ...prev, [campaignId]: true }));
-                                        try {
-                                            const token = localStorage.getItem("accessToken");
-                                            // Ensure campaign_id is a number and status is a string
-                                            const payload = {
-                                                platform: "Zepto",
-                                                campaign_id: Number(campaignId),
-                                                status: confirmation.newStatus // Only ACTIVE or PAUSED
-                                            };
-                                            const response = await fetch("https://react-api-script.onrender.com/continental/play-pause", {
-                                                method: "PUT",
-                                                headers: {
-                                                    "Content-Type": "application/json",
-                                                    Authorization: `Bearer ${token}`,
-                                                },
-                                                body: JSON.stringify(payload)
-                                            });
-                                            if (response.ok) {
-                                                handleSnackbarOpen("Status updated successfully!", "success");
-                                                clearCampaignCaches();
-                                                await getCampaignsData(true);
-                                            } else {
-                                                handleSnackbarOpen("Failed to update status!", "error");
-                                            }
-                                        } catch (error) {
-                                            handleSnackbarOpen("Error updating status!", "error");
-                                        } finally {
-                                            setUpdatingCampaigns(prev => ({ ...prev, [campaignId]: false }));
-                                            setConfirmation({ show: false }); // Always close dialog
-                                        }
-                                    }}>Confirm</Button>
-                                </DialogActions>
-                            </Dialog>
+                    <Switch
+                        checked={isActive}
+                        onChange={() => handleToggle(
+                            params.row.campaign_id,
+                            status,
+                            
                         )}
-                    </>
+                    />
                 );
             },
             type: "singleSelect",
+            valueOptions: STATUS_OPTIONS
         },
         {
             field: "impressions",
