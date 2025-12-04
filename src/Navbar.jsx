@@ -151,7 +151,7 @@ const Navbar = () => {
                 }
 
                 // Set N/A for Blinkit and Zepto operators
-                if (["Blinkit", "Zepto"].includes(operatorName)) {
+                if (["Blinkit", "Zepto", "Swiggy"].includes(operatorName)) {
                     setWalletBalance("N/A");
                     setLoading(false);
                     return;
@@ -357,7 +357,7 @@ const Navbar = () => {
                                         }
                                     />
                                 )}
-                                {["Amazon","Zepto","BigBasket","Blinkit","Zepto"].includes(operatorName) && (
+                                {["Amazon","Zepto","BigBasket","Blinkit","Swiggy"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/rules${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`
@@ -375,7 +375,7 @@ const Navbar = () => {
                                         }
                                     />
                                 )}
-                                {!["Blinkit","Amazon","Zepto","Zepto"].includes(operatorName) && (
+                                {!["Blinkit","Amazon","Zepto","Swiggy"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/keyword-analysis${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`
@@ -393,7 +393,7 @@ const Navbar = () => {
                                         }
                                     />
                                 )}
-                                {!["Blinkit","Amazon","Zepto","Swiggy","BigBasket","Zepto"].includes(operatorName) && (
+                                {!["Blinkit","Amazon","Zepto","Swiggy","BigBasket"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/product-analytics${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`
@@ -411,7 +411,7 @@ const Navbar = () => {
                                         }
                                     />
                                 )}
-                                {!["Amazon","Swiggy"].includes(operatorName) && (
+                                {!["Amazon"].includes(operatorName) && (
                                     <RedirectLink
                                         url={`/negative-keywords${operatorTypeParams === ""
                                             ? `?operator=${OPERATOR.AMAZON}`

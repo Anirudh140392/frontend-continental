@@ -280,7 +280,8 @@ const normalizeFilters = (filters) => {
                     }}
                 >
                     <MenuItem value="Bid">Bid</MenuItem>
-                    <MenuItem value="Date Extension">Date Extension</MenuItem>
+                    <MenuItem value="Budget">Date Extension</MenuItem>
+                    
                 </Select>
             </FormControl>
 

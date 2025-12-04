@@ -720,11 +720,11 @@ const ProductsComponent = () => {
             headerAlign: "left",
         },
         {
-            field: "roi",
+            field: "roas",
             headerName: "ROAS",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.roi} percentValue={params.row.roi_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.roas} percentValue={params.row.roas_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },

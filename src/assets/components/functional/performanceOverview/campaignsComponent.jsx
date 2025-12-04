@@ -385,6 +385,153 @@ const CampaignsComponent = (props, ref) => {
         },
     ];
 
+     const CampaignsColumnSwiggy = [
+        {
+            field: "campaign_name",
+            headerName: "CAMPAIGN",
+            minWidth: 200,
+            renderCell: (params) => (
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                    <Box sx={{ cursor: "pointer" }}>
+                        {params.row.campaign_name}
+                    </Box>
+                </Box>
+            ),
+        },
+       {
+        field: "api_budget",
+        headerName: "BUDGET",
+        minWidth: 200,
+        renderCell: (params) => (
+            <BudgetCell 
+                value={params.row.api_budget} 
+                campaignId={params.row.campaign_id} 
+                platform={operator}
+                endDate={params.row.end_date || null}
+                onUpdate={async (campaignId, newBudget) => {
+                    // Clear cache and force refresh after budget change
+                    clearCampaignCaches();
+                    await getCampaignsData(true);
+                    setCampaignsData(prevData => {
+                        const updatedData = {
+                            ...prevData,
+                            data: prevData.data.map(campaign =>
+                                campaign.campaign_id === campaignId
+                                    ? { ...campaign, api_budget: newBudget }
+                                    : campaign
+                            )
+                        };
+                        return updatedData;
+                    });
+                }} 
+                onSnackbarOpen={handleSnackbarOpen} 
+            />
+        ), 
+        type: "number", 
+        align: "left",
+        headerAlign: "left",
+    },
+        {
+            field: "final_status",
+            headerName: "STATUS",
+            minWidth: 100,
+            align: "center",
+            headerAlign: "center",
+            renderCell: (params) => {
+                const status = params.row.final_status;
+
+                if (updatingCampaigns[params.row.campaign_id]) {
+                    return (
+                        <Box sx={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            <CircularProgress size={24} />
+                        </Box>
+                    );
+                }
+
+                // Toggle is ON for ACTIVE or ON_HOLD
+                // Toggle is OFF for STOPPED
+                const isActive = isStatusActive(status);
+
+                return (
+                    <Switch
+                        checked={isActive}
+                        onChange={() => handleToggle(
+                            params.row.campaign_id,
+                            status,
+                            
+                        )}
+                    />
+                );
+            },
+            type: "singleSelect",
+            valueOptions: STATUS_OPTIONS
+        },
+        {
+            field: "impressions",
+            headerName: "IMPRESSIONS",
+            minWidth: 150,
+            renderCell: (params) => (
+                <ColumnPercentageDataComponent mainValue={params.row.impressions} percentValue={params.row.impressions_change} />
+            ), type: "number", align: "left",
+            headerAlign: "left",
+        },
+        {
+            field: "clicks",
+            headerName: "CLICKS",
+            minWidth: 150,
+            renderCell: (params) => (
+                <ColumnPercentageDataComponent mainValue={params.row.clicks} percentValue={params.row.clicks_change} />
+            ), type: "number", align: "left",
+            headerAlign: "left",
+        },
+        {
+            field: "spend",
+            headerName: "SPENDS",
+            minWidth: 170,
+            renderCell: (params) => (
+                <ColumnPercentageDataComponent mainValue={params.row.spend} percentValue={params.row.spend_change} />
+            ), type: "number", align: "left",
+            headerAlign: "left",
+        },
+        {
+            field: "orders",
+            headerName: "ORDERS",
+            minWidth: 150,
+            renderCell: (params) => (
+                <ColumnPercentageDataComponent mainValue={params.row.orders} percentValue={params.row.orders_change} />
+            ), type: "number", align: "left",
+            headerAlign: "left",
+        },
+        {
+            field: "revenue",
+            headerName: "SALES",
+            minWidth: 150,
+            renderCell: (params) => (
+                <ColumnPercentageDataComponent mainValue={params.row.revenue} percentValue={params.row.revenue_change} />
+            ), type: "number", align: "left",
+            headerAlign: "left",
+        },
+        {
+            field: "cpm",
+            headerName: "CPM",
+            minWidth: 150,
+            renderCell: (params) => (
+                <ColumnPercentageDataComponent mainValue={params.row.cpm} percentValue={params.row.cpm_change} />
+            ), type: "number", align: "left",
+            headerAlign: "left",
+        },
+        {
+            field: "roas",
+            headerName: "ROAS",
+            minWidth: 150,
+            renderCell: (params) => (
+                <ColumnPercentageDataComponent mainValue={params.row.roas} percentValue={params.row.roas_change} />
+            ), type: "number", align: "left",
+            headerAlign: "left",
+        },
+    ];
+
+
 
     const normalizedBrands = useMemo(() => {
         const source = brands;
@@ -542,6 +689,7 @@ const CampaignsComponent = (props, ref) => {
     const columns = useMemo(() => {
         if (operator === "Blinkit") return CampaignsColumnBlinkit;
         if (operator === "Zepto") return CampaignsColumnZepto;
+        if (operator === "Swiggy") return CampaignsColumnSwiggy;
         return [];
     }, [operator, brands, updatingCampaigns]);
 

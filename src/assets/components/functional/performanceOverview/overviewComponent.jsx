@@ -238,9 +238,9 @@ const OverviewComponent = () => {
 
 
     const CategoryColumnsSwiggy = [
-        { field: "category", headerName: "CATEGORY", minWidth: 150 },
+        { field: "campaign_tags", headerName: "CATEGORY", minWidth: 150 },
         {
-            field: "impressions_x",
+            field: "impressions",
             headerName: "IMPRESSIONS",
             minWidth: 150,
             type: "number",
@@ -248,15 +248,22 @@ const OverviewComponent = () => {
             headerAlign: "left",
         },
         {
-            field: "clicks_x",
+            field: "clicks",
             headerName: "CLICKS",
+            minWidth: 150,
+            type: "number", align: "left",
+            headerAlign: "left",
+        },
+         {
+            field: "orders",
+            headerName: "ORDERS",
             minWidth: 150,
             type: "number", align: "left",
             headerAlign: "left",
         },
         
         {
-            field: "spends_x",
+            field: "spend",
             headerName: "SPENDS",
             minWidth: 150,
             type: "number", align: "left",
@@ -264,7 +271,7 @@ const OverviewComponent = () => {
 
         },
         {
-            field: "sales_x",
+            field: "revenue",
             headerName: "SALES",
             minWidth: 150,
             type: "number", align: "left",
@@ -302,6 +309,14 @@ const OverviewComponent = () => {
             type: "number", align: "left",
             headerAlign: "left",
         },
+         {
+            field: "aov",
+            headerName: "AOV",
+            minWidth: 150,
+            type: "number", align: "left",
+            headerAlign: "left",
+        },
+        
        
         /*{
             field: "acos",

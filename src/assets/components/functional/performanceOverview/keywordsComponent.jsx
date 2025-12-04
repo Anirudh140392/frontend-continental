@@ -672,12 +672,12 @@ useEffect(() => {
         },
          { field: "match_type", headerName: "MATCH TYPE", minWidth: 150, headerAlign: "left", },
         {
-            field: "ecpm",
+            field: "bid_api",
             headerName: "BID",
             minWidth: 150,
             renderCell: (params) => (
                 <BidCell
-                    value={params.row.ecpm}
+                    value={params.row.bid_api}
                     campaignId={params.row.campaign_id}
                     platform={operator}
                     keyword={params.row.keyword_name}
@@ -717,11 +717,11 @@ useEffect(() => {
         },
 
         {
-            field: "sales",
+            field: "revenue",
             headerName: "SALES",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.sales} percentValue={params.row.sales_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.revenue} percentValue={params.row.revenue_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },
@@ -767,11 +767,11 @@ useEffect(() => {
         },*/
 
         {
-            field: "roi",
+            field: "roas",
             headerName: "ROAS",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.roi} percentValue={params.row.roi_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.roas} percentValue={params.row.roas_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },
@@ -791,25 +791,24 @@ useEffect(() => {
             field: "ad_type", headerName: "AD TYPE", minWidth: 150,
         },*/
          {
-            field: "a2c",
-            headerName: "ATC",
+            field: "aov",
+            headerName: "AOV",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.a2c} percentValue={params.row.a2c_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.aov} percentValue={params.row.aov_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },
         {
-            field: "a2c_rate",
-            headerName: "ATC RATE",
+            field: "cvr",
+            headerName: "CVR",
             minWidth: 150,
             renderCell: (params) => (
-                <ColumnPercentageDataComponent mainValue={params.row.a2c_rate} percentValue={params.row.a2c_rate_change} />
+                <ColumnPercentageDataComponent mainValue={params.row.cvr} percentValue={params.row.cvr_change} />
             ), type: "number", align: "left",
             headerAlign: "left",
         },
 
-       
         {
             field: "campaign_name",
             headerName: "CAMPAIGN",
