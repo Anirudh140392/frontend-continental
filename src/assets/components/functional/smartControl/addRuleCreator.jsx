@@ -627,7 +627,7 @@ const AddRuleCreator = ({ operator, onSave, onClose, setShowRuleModal, open = tr
 
       setToast({
         open: true,
-        message: "Rule created successfully! It will activate in 6 hours.",
+        message: "Rule created successfully! It will take 8 hours to reflect.",
         severity: "success",
       });
 

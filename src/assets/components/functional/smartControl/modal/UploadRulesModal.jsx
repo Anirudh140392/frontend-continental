@@ -55,7 +55,7 @@ const UploadRulesModal = ({ open, setOpen, onUpload, handleSnackbarOpen, getRule
                     clearInterval(interval);
                     setUploadResult(data);
                     setUploadState("completed");
-                    handleSnackbarOpen("Excel processed successfully!", "success");
+                    handleSnackbarOpen("Excel processed successfully! It will take 8 hours to reflect.", "success");
                     getRulesData(true);
                 } else if (data.status === "failed" || data.error) {
                     clearInterval(interval);
@@ -169,6 +169,9 @@ const UploadRulesModal = ({ open, setOpen, onUpload, handleSnackbarOpen, getRule
                             <Typography variant="body2">Total Rows: <strong>{uploadResult?.total_rows}</strong></Typography>
                             <Typography variant="body2">Valid Rows: <strong>{uploadResult?.valid_rows}</strong></Typography>
                             <Typography variant="body2">Inserted: <strong>{uploadResult?.inserted}</strong></Typography>
+                            <Typography variant="body2" sx={{ mt: 1, color: "text.secondary", fontStyle: "italic" }}>
+                                * It will take 8 hours to reflect
+                            </Typography>
                         </Box>
                     </Box>
                 )}

@@ -362,7 +362,7 @@ const SmartControlDatatable = () => {
       });
 
 
-      handleSnackbarOpen(result.message || "Rule status updated", "success");
+      handleSnackbarOpen(`${result.message || "Rule status updated"}. It will take 8 hours to reflect.`, "success");
 
     } catch (error) {
       console.error("Failed to update rule status:", error.message);
